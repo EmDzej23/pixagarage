@@ -1,0 +1,47 @@
+{
+  "name": "polygon-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build && next export",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.16",
+    "@headlessui/react": "^1.4.2",
+    "@mui/material": "^5.2.6",
+    "@nomiclabs/hardhat-ethers": "^2.0.2",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "@openzeppelin/contracts": "^4.2.0",
+    "@walletconnect/web3-provider": "^1.7.0",
+    "axios": "^0.21.1",
+    "chai": "^4.3.4",
+    "color-util": "^2.2.3",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.4.1",
+    "fontawesome": "^5.6.3",
+    "hardhat": "^2.4.1",
+    "huebee": "^2.1.1",
+    "ipfs-http-client": "^50.1.2",
+    "jquery": "^3.6.0",
+    "next": "11.0.1",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-lazyload": "^3.2.0",
+    "react-modal": "^3.14.4",
+    "sort-colors-js": "^1.0.2",
+    "web3connect": "^1.0.0-beta.33",
+    "web3modal": "^1.9.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.2.6",
+    "eslint": "7.29.0",
+    "eslint-config-next": "11.0.1",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4"
+  }
+}
