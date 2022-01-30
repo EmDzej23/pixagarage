@@ -16,7 +16,19 @@ import ColorSpan, { compare } from './utils'
 import Link from 'next/link'
 import OpenseaLink from './opensealink'
 import TagEl from './tag-element'
-
+import Modal from 'react-modal';
+const customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    maxWidth: "80%",
+    overflow: "auto"
+  },
+};
 let rpcEndpoint = null
 
 if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
@@ -26,10 +38,12 @@ if (process.env.NEXT_PUBLIC_WORKSPACE_URL) {
 export default function Home() {
   const [nfts, setNfts] = useState([])
   const [start, setStart] = useState(0);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const router = useRouter();
   const [shouldLoad, setShouldLoad] = useState(true);
   const [loadingState, setLoadingState] = useState('not-loaded')
+  const [modalIsOpen, setIsOpen] = useState(false);
+  const [loadingText, setLoadingText] = useState("Buying NFT...");
   useEffect(() => {
     loadNFTs()
   }, [])
@@ -82,6 +96,18 @@ export default function Home() {
     setLoadingState('loaded')
   }
 
+  function openModal() {
+    setIsOpen(true);
+  }
+
+  function afterOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
   async function buyNft(nft) {
     const providerOptions = {
       injected: {
@@ -110,6 +136,7 @@ export default function Home() {
       cacheProvider: true,
       providerOptions
     })
+    openModal();
     const connection = await web3Modal.connect()
     const provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
@@ -119,12 +146,26 @@ export default function Home() {
     const transaction = await contract.createMarketSale(nftaddress, nft.itemId, {
       value: price
     })
+    setLoadingText("Waiting for transaction confirm...")
     await transaction.wait()
+    closeModal();
     router.push('./my-assets');
   }
   if (loadingState === 'loaded' && !nfts.length) return (<h1 className="px-20 py-10 text-3xl">No items in marketplace</h1>)
   return (
     <div>
+      <Modal
+        ariaHideApp={false}
+        isOpen={modalIsOpen}
+        onAfterOpen={afterOpenModal}
+        onRequestClose={(e) => { }}
+        style={customStyles}
+        contentLabel="Example Modal"
+      >
+        <div className="flex justify-center">
+          <h2>{loadingText}</h2><div className="lds-dual-ring"></div>
+        </div>
+      </Modal>
       <div className="flex justify-center">
         <div className="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">

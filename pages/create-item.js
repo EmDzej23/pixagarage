@@ -96,6 +96,7 @@ export default function CreateItem() {
     window.screenWithBtmHPercent;
     window.screenWithNOBtmHPercent;
     window.resizeCoef = 0.12;
+    window.disabled = false;
   }
   useEffect(() => {
     $(document).ready(() => {
@@ -863,6 +864,7 @@ export default function CreateItem() {
     return max;
   }
   async function startMint() {
+    window.disabled = true;
     const file = window.fileToUpload;
     try {
       const added = await client.add(
@@ -960,9 +962,11 @@ export default function CreateItem() {
     }
     if (onlyCreate) {
       if (confirm("Your token will be on your opensea account, here is the link: https://opensea.io/assets/matic/0xe24590c9ebef69f01682c704664deb6dc9f5926f/" + tokenId)) {
+        window.disabled = true;
         router.push('./')
         return;
       }
+      window.disabled = true;
       router.push('./')
       return;
     }
@@ -973,6 +977,7 @@ export default function CreateItem() {
     const dominantColor = getDominantColor();
     transaction = await contract.createMarketItem(nftaddress, tokenId, pr, dominantColor, window.name, false, false)
     await transaction.wait()
+    window.disabled = true;
     router.push('./')
   }
 
@@ -1355,7 +1360,7 @@ export default function CreateItem() {
                     </label>
                   </div>
                 </div>
-                <button className="button green-btn">SELL <FontAwesomeIcon icon={faRocket} /></button>
+                <button disabled={window.disabled} className="button green-btn">SELL <FontAwesomeIcon icon={faRocket} /></button>
               </div>
               <div>
                 <NImage alt="" layout="responsive" width="200" height="200" id="imgToSell" src={imgToUpload}></NImage>
