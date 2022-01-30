@@ -48,6 +48,7 @@ export default function Home() {
     loadNFTs()
   }, [])
   async function loadNFTs() {
+    setLoadingState('loading')
     const provider = new ethers.providers.JsonRpcProvider("https://rpc-mainnet.maticvigil.com/")
     const tokenContract = new ethers.Contract(nftaddress, Pixag.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, PixaGarage.abi, provider)
@@ -191,7 +192,8 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {shouldLoad ? <button onClick={() => { loadNFTs() }}>Load more</button> : <div></div>}
+      {shouldLoad && loadingState !== 'loaded' ? <div>Loading...</div> : <div></div>}
+      {shouldLoad && loadingState === 'loaded' ? <button onClick={() => { loadNFTs() }}>Load more</button> : <div></div>}
     </div>
   )
 }

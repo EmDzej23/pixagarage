@@ -24,6 +24,7 @@ export default function Colors() {
     const [selectedColor, setSelectedColor] = useState(undefined);
     const [loadingState, setLoadingState] = useState('not-loaded');
     const [nft, setNft] = useState({});
+    const [allColors, setAllColors] = useState(<div></div>);
     useEffect(() => {
         loadNFTs()
     }, [])
@@ -81,6 +82,7 @@ export default function Colors() {
             return;
         }
         const items = nfts;
+        const hexes = [];
         await Promise.all(data.map(async i => {
             const tokenUri = await tokenContract.tokenURI(i.tokenId)
             const meta = await axios.get(tokenUri)
@@ -98,12 +100,36 @@ export default function Colors() {
                 isColor: i.assetColor,
                 color: i.dominantColor
             }
+            hexes.push(item.color);
             items.push(item);
             return item
         }))
         items.sort(compare);
         setNfts(items)
+        const arr = [];
         setLoadingState('loaded')
+        for (let ik = 0; ik < 256; ik += 17) {
+            for (let jk = 0; jk < 256; jk += 17) {
+                for (let kk = 0; kk < 256; kk += 17) {
+                    const hex = rgbToHex(ik, jk, kk);
+                    const invHex = invertColor(hex);
+                    if (hexes.indexOf(hex) === -1) {
+                        arr.push(
+                            <button className="w-full font-bold py-2 rounded" onClick={(e) => { document.getElementById("colorSearch").value = hex; window.scrollTo(0, 0) }} style={{ backgroundColor: hex, color: invHex, margin: "1px", maxWidth: "100px", display: "inline-block" }}>{hex}</button>
+                        )
+                    }
+                }
+            }
+        }
+        setAllColors(arr);
+    }
+    function rgbToHex(r, g, b) {
+        return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
     }
     async function findColor() {
         const hex = document.getElementById("colorSearch").value.replace("#", "");
@@ -234,17 +260,42 @@ export default function Colors() {
             b: parseInt(result[3], 16)
         } : null;
     }
+    function invertColor(hex) {
+        if (hex.indexOf('#') === 0) {
+            hex = hex.slice(1);
+        }
+        // convert 3-digit hex to 6-digits.
+        if (hex.length === 3) {
+            hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+        }
+        if (hex.length !== 6) {
+            throw new Error('Invalid HEX color.');
+        }
+        // invert color components
+        var r = (255 - parseInt(hex.slice(0, 2), 16)).toString(16),
+            g = (255 - parseInt(hex.slice(2, 4), 16)).toString(16),
+            b = (255 - parseInt(hex.slice(4, 6), 16)).toString(16);
+        // pad each with zeros and return
+        return '#' + padZero(r) + padZero(g) + padZero(b);
+    }
+
+    function padZero(str, len) {
+        len = len || 2;
+        var zeros = new Array(len).join('0');
+        return (zeros + str).slice(-len);
+    }
     debugger;
     if (loadingState !== 'loaded') return (<h1 className="py-10 px-20 text-3xl">Loading</h1>)
 
     return (
         <div>
             <div className="flex justify-center">
+
                 <div className="p-4">
                     <h2 className="text-2xl py-2">Colors available: {4096 - nfts.length} out of 4096</h2>
                     <input type="text" id="colorSearch" placeholder="Type HEX color" />
                     <br></br>
-                    <button onClick={findColor}>Search</button>
+                    <button className="w-full bg-green-500 text-white font-bold py-2 px-12 rounded" onClick={findColor}>BUY COLOR</button>
                     {Boolean(nft.hex !== undefined) &&
                         (<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
                             <div className="border shadow rounded-xl overflow-hidden">
@@ -256,8 +307,15 @@ export default function Colors() {
 
                         </div>)}
                 </div>
+
                 <br></br>
 
+            </div>
+            <br></br>
+            <br></br>
+            <div>Available hex colors are:
+                <br></br>
+                {allColors}
             </div>
         </div>
     )

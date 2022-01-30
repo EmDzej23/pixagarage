@@ -5,7 +5,7 @@ export default function About() {
 
     return (
         <div>
-            <h2 className="text-2xl py-2">ABOUT</h2>
+            <h2 className="text-2xl py-2">Getting started...</h2>
             <p>
                 Let&apos;s make real world more beautiful and colorful!
     <br></br>
@@ -66,6 +66,11 @@ export default function About() {
             <br></br>
             <br></br>
             bring back the love, bring back the happiness! We must do it together!
+            <br></br>
+            <br></br>
+            Useful links:
+            <br></br>
+            <a rel="noreferrer" href="https://medium.com/stakingbits/setting-up-metamask-for-polygon-matic-network-838058f6d844" target="_blank">How to switch to polygon</a>
             <br></br>
             <br></br>
         </div>

@@ -56,7 +56,7 @@ function Marketplace({ Component, pageProps }) {
           </Link>
           <Link href="/about">
             <a href="#responsive-header" className="mr-6 text-green-500">
-              ABOUT
+              Getting started...
             </a>
           </Link>
         </div>
@@ -153,7 +153,7 @@ function Marketplace({ Component, pageProps }) {
             </Link></li>
             <li><Link href="/about">
               <a href="#responsive-header" className="mr-6 text-green-500">
-                ABOUT
+                Getting started...
             </a>
             </Link></li>
           </ul>
