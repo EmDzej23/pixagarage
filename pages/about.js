@@ -9,7 +9,7 @@ export default function About() {
             <p>
                 Let&apos;s make real world more beautiful and colorful!
     <br></br>
-                Let&apos;s build new communities that will, I don&apos;t know, maybe:
+                Let&apos;s build new communities that will, for example, maybe:
     <br></br>
                 <br></br>
                 <ul>
@@ -20,18 +20,28 @@ export default function About() {
                     <li><b>change the way we think about each other, the way we look at each other!</b></li>
                     <li><b>change the way we gather to achieve our common goal!</b></li>
                     <br></br>
-                    <li><b>help us create new original and creative events in our parks, playgrounds, yards...</b></li>
+                    <li><b>create new sport teams, leagues and even new sports!</b></li>
+                    <br></br>
+                    <li><b>plant new trees, build forests!</b></li>
+                    <br></br>
+                    <li><b>plant love, good, happiness all over the world fields!</b></li>
+                    <br></br>
+                    <li><b>create new songs, new melodies, new rhythms, and new waves</b></li>
+                    <br></br>
+                    <li><b>create new original and creative events in our parks, playgrounds, yards...</b></li>
                     <br></br>
                     <li><b>make us happier</b></li>
                     <br></br>
                     <li><b>bring back the love and joy to this sad and gray full-of-meta real world</b></li>
+                    <br></br>
+                    <li><b>...and soo so many other beautiful new stuff for the new world that is coming every day... we are waiting for your help!</b></li>
                     <br></br>
                     <br></br>
                 </ul>
                 use this online free tool to show the world how you would improve it
     <br></br>
                 <br></br>
-                or just, play around and express yourself, and own it or sell it right away!
+                or just, play around and express yourself, and own it and try to sell it right away!
     <br></br>
                 find other people that think like you, join the <a rel="noreferrer" href="https://discord.gg/mdgZ4kvzgy" target="_blank">discord</a> topics
     <br></br>
@@ -60,6 +70,10 @@ export default function About() {
                 be prepared, be hungry, because all of us together, are here to stay
     <br></br>
                 we are here to roll over this world into the world of love, good, happiness, creativity, knowledge, laughter that will last long after we are gone
+                <br></br>
+                <br></br>
+                <b>and yes, buying a color here on our site, you get 10% of an item that has your color as dominant one, when it gets sold!</b>
+                <br></br>
             </p>
             <br></br>
             Tell us whatever you want on <a rel="noreferrer" href="https://twitter.com/PixaGarage" target="_blank">Twitter</a>, <a rel="noreferrer" href="https://www.instagram.com/pixa_garage/" target="_blank">Instagram</a>, email: office@pixagarage.com
