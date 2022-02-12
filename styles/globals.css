@@ -85,6 +85,19 @@
     cursor: pointer;
     min-height: 30px
   }
+  .back {
+    display: inline-block;
+    line-height: 2.2em;
+    padding: 0 0.62em;
+    border: 1px solid #666;
+    border-radius: 0.25em;
+    background-image: linear-gradient(to bottom, white, red)!important;
+    box-shadow: inset 0 0 0.1em #fff, 0.2em 0.2em 0.2em rgba(0, 0, 0, 0.3);
+    font-family: arial, sans-serif;
+    font-size: 0.8em;
+    cursor: pointer;
+    min-height: 30px
+  }
 
   .green-btn {
     color: white;

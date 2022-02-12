@@ -44,6 +44,8 @@ export default function CreateItem() {
   const [onlyCreate, setOnlyCreate] = useState(true);
   const [price, setPrice] = useState(0);
   const [name, setName] = useState("");
+  const [simL, setSimL] = useState(false);
+  const [simU, setSimU] = useState(false);
   const [description, setDescription] = useState("");
   if (typeof window !== "undefined" && !initialized) {
     setInitialized(true);
@@ -97,6 +99,8 @@ export default function CreateItem() {
     window.screenWithNOBtmHPercent;
     window.resizeCoef = 0.12;
     window.disabled = false;
+    window.simL = false;
+    window.simU = false;
   }
   useEffect(() => {
     $(document).ready(() => {
@@ -573,7 +577,7 @@ export default function CreateItem() {
     a.download = Date.now() + ".json";
     a.click();
   }
-  function draw(x, y) {
+  function draw(x, y, copy) {
     window.myContext.strokeStyle = clickChanged;
     window.myContext.fillStyle = clickChanged;
     window.myContext.fillRect(x, y, window.multC, window.multC);
@@ -584,7 +588,17 @@ export default function CreateItem() {
     if (!window.historyMoves[move]) window.historyMoves[move] = [];
     window.historyMoves[move].push({ x, y, color: clickChanged });
     drawBorder(x, y, window.multC, window.multC, 1);
-
+    if (window.simU && window.simL && !copy) {
+      draw(window.smallW * multC - x - multC, window.smallH * multC - y - multC, true);
+      draw(window.smallW * multC - x - multC, y, true);
+      draw(x, window.smallH * multC - y - multC, true);
+    }
+    if (window.simL && !window.simU && !copy) {
+      draw(window.smallW * multC - x - multC, y, true);
+    }
+    if (window.simU && !window.simL && !copy) {
+      draw(x, window.smallH * multC - y - multC, true);
+    }
   }
 
   function drawBorder(xPos, yPos, width, height, thickness = 1) {
@@ -1279,6 +1293,16 @@ export default function CreateItem() {
 
     fr.readAsText(l.item(i));
   }
+  function setSim(where) {
+    if (where === "l") {
+      setSimL(!simL);
+      window.simL = !window.simL;
+    }
+    else {
+      setSimU(!simU);
+      window.simU = !window.simU;
+    }
+  }
   function readJson() {
     var files = document.getElementById('selectFiles').files;
     if (files.length <= 0) {
@@ -1401,16 +1425,16 @@ export default function CreateItem() {
           <input type="color" id="favcolor" name="favcolor" defaultValue={"#000000"} />
           <label htmlFor="brush" id="brushLabel" className="">brush: 0</label>
           <input defaultValue="0" onChange={() => changeBrush()} type="range" id="brush" name="volume" min="0" max="4" />
-          <label htmlFor="pixelCoef" id="pixelOffsetLabel" className="">Pixels Offset: 50</label>
-          <input defaultValue="50" onChange={() => pixelOffsetUpdate()} type="range" id="pixelOffset" name="volume2" min="5" max="150"
-            step="5" />
+          <label htmlFor="pixelCoef" id="pixelOffsetLabel" className="">Pixels Offset: 51</label>
+          <input defaultValue="51" onChange={() => pixelOffsetUpdate()} type="range" id="pixelOffset" name="volume2" min="17" max="136"
+            step="17" />
           <label htmlFor="cols" id="brushLabel" className="">Cols</label>
           <input defaultValue="70" onChange={() => ""} type="number" id="cols" name="cols" min="5" max="70" />
           <label htmlFor="rows" id="brushLabel" className="">Rows</label>
           <input defaultValue="55" onChange={() => ""} type="number" id="rows" name="rows" min="5" max="70" />
           <button className="button" onClick={() => recreateCanvas()}><FontAwesomeIcon icon={faTable} /> resize</button>
-          <button className="button" onClick={() => simetrisize('l')}>Mirror Left-Right</button>
-          <button className="button" onClick={() => simetrisize('u')}>Mirror Up-Down</button>
+          <button style={{ backgroundImage: !simL ? "linear-gradient(to bottom, white, red)" : "linear-gradient(to bottom, white, aquamarine)" }} className="button" onClick={() => setSim('l')}>Mirror Left-Right</button>
+          <button style={{ backgroundImage: !simU ? "linear-gradient(to bottom, white, red)" : "linear-gradient(to bottom, white, aquamarine)" }} className="button" onClick={() => setSim('u')}>Mirror Up-Down</button>
           <button className="button collapseBtn" onClick={() => collapseBottom()}><FontAwesomeIcon icon={faArrowDown} /></button>
 
         </div>
