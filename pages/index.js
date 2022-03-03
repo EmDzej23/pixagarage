@@ -49,7 +49,7 @@ export default function Home() {
   }, [])
   async function loadNFTs() {
     setLoadingState('loading')
-    const provider = new ethers.providers.JsonRpcProvider("https://rpc-mainnet.maticvigil.com/")
+    const provider = new ethers.providers.JsonRpcProvider("https://polygon-rpc.com/")
     const tokenContract = new ethers.Contract(nftaddress, Pixag.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, PixaGarage.abi, provider)
     let data;
@@ -72,6 +72,7 @@ export default function Home() {
     await Promise.all(data.map(async i => {
       const tokenUri = await tokenContract.tokenURI(i.tokenId)
       const meta = await axios.get(tokenUri)
+      console.log(tokenUri);
       let price = ethers.utils.formatUnits(i.price.toString(), 'ether')
       let item = {
         price,
@@ -127,7 +128,7 @@ export default function Home() {
         package: WalletConnectProvider,
         options: {
           rpc: {
-            137: "https://rpc-mainnet.maticvigil.com/"//137: "https://rpc-mainnet.maticvigil.com/"//"https://rpc-mainnet.maticvigil.com" // required
+            137: "https://polygon-rpc.com/"//137: "https://polygon-rpc.com/"//"https://rpc-mainnet.maticvigil.com" // required
           }
         }
       }

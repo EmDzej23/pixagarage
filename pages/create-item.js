@@ -38,6 +38,7 @@ export default function CreateItem() {
   const [deviceType, setDeviceType] = useState("");
   const [initialized, setInitialized] = useState(false);
   const [modalIsOpen, setIsOpen] = useState(false);
+  const [modalTextIsOpen, setTextIsOpen] = useState(false);
   const [modalInfoIsOpen, setInfoIsOpen] = useState(true);
   const [detailsModalIsOpen, setDetailsIsOpen] = useState(false);
   const [imgToUpload, setImgToUpload] = useState("");
@@ -46,6 +47,7 @@ export default function CreateItem() {
   const [name, setName] = useState("");
   const [simL, setSimL] = useState(false);
   const [simU, setSimU] = useState(false);
+  const [loadingText, setLoadingText] = useState("Buying NFT...");
   const [description, setDescription] = useState("");
   if (typeof window !== "undefined" && !initialized) {
     setInitialized(true);
@@ -229,6 +231,13 @@ export default function CreateItem() {
   }
   function openModal() {
     setIsOpen(true);
+  }
+  function openTextModal() {
+    setTextIsOpen(true);
+  }
+
+  function closeTextModal() {
+    setTextIsOpen(false);
   }
 
   function openDetailsModal() {
@@ -921,6 +930,9 @@ export default function CreateItem() {
   }
 
   async function createSale(url) {
+    setLoadingText("Minting NFT...")
+    openTextModal()
+
     if (!window.localStorage.getItem("WEB3_CONNECT_CACHED_PROVIDER")) {
       alert("Please press CONNECT to connect to your wallet!");
       return;
@@ -943,7 +955,7 @@ export default function CreateItem() {
         package: WalletConnectProvider,
         options: {
           rpc: {
-            137: "https://rpc-mainnet.maticvigil.com/"//80001: "https://rpc-mumbai.maticvigil.com/" // required
+            137: "https://polygon-rpc.com/"//80001: "https://rpc-mumbai.maticvigil.com/" // required
           }
         }
       }
@@ -953,6 +965,7 @@ export default function CreateItem() {
       cacheProvider: true,
       providerOptions,
     })
+
     const connection = await web3Modal.connect()
     let provider = new ethers.providers.Web3Provider(connection)
     const signer = provider.getSigner()
@@ -963,34 +976,51 @@ export default function CreateItem() {
     let transaction = await contract.createToken(url)
 
     let tx = await transaction.wait()
+
     let event = tx.events[0]
     let value = event.args[2]
     let tokenId = value.toNumber()
     if (!onlyCreate) {
+      setLoadingText("Puting ITEM to PixaGarage marketplace...")
+      contract = new ethers.Contract(nftmarketaddress, PixaGarage.abi, signer);
+      let tokenData;
+      for await (let i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
+        tokenData = await contract.fetchSingleItem(tokenId);
+        console.log("token");
+        console.log(tokenData);
+        if (tokenData.itemId.toNumber() !== 0) {
+          break;
+        }
+      }
+
       if (confirm("Great, NFT is minted, we will now put your item on PixaGarage market!")) {
         console.log(tokenId)
       }
       else {
         console.log(tokenId)
       }
+
     }
     if (onlyCreate) {
-      if (confirm("Your token will be on your opensea account, here is the link: https://opensea.io/assets/matic/0xe24590c9ebef69f01682c704664deb6dc9f5926f/" + tokenId)) {
+      if (confirm("Your token will be on your opensea account, here is the link: https://opensea.io/assets/matic/0x31D5bb5DbAE271Cb0340dB175FD0141F928235Bc/" + tokenId)) {
         window.disabled = true;
         router.push('./')
+        closeTextModal();
         return;
       }
       window.disabled = true;
       router.push('./')
+      closeTextModal();
       return;
     }
     const pr = ethers.utils.parseUnits(window.price, 'ether')
 
     // list the item for sale on the marketplace 
-    contract = new ethers.Contract(nftmarketaddress, PixaGarage.abi, signer)
+
     const dominantColor = getDominantColor();
     transaction = await contract.createMarketItem(nftaddress, tokenId, pr, dominantColor, window.name, false, false)
     await transaction.wait()
+    closeTextModal();
     window.disabled = true;
     router.push('./')
   }
@@ -1311,16 +1341,32 @@ export default function CreateItem() {
 
     readFile(0, files);
   }
+  function afterTextOpenModal() {
+    // references are now sync'd and can be accessed.
+  }
   async function sellArt(event) {
     event.preventDefault();
     window.price = document.getElementById("priceVal")?.value || "0.001";
     window.name = document.getElementById("nameVal").value.trim();
     window.description = document.getElementById("descVal").value.trim();
+    closeDetailsModal();
     await startMint();
   }
   if (Boolean(deviceType === "Desktop")) {
     return (
       <div>
+        <Modal
+          ariaHideApp={false}
+          isOpen={modalTextIsOpen}
+          onAfterOpen={afterTextOpenModal}
+          onRequestClose={(e) => { }}
+          style={customStyles}
+          contentLabel="Example Modal"
+        >
+          <div className="flex justify-center">
+            <h2>{loadingText}</h2><div className="lds-dual-ring"></div>
+          </div>
+        </Modal>
         <Modal
           ariaHideApp={false}
           isOpen={modalIsOpen}

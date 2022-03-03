@@ -80,7 +80,7 @@ function Marketplace({ Component, pageProps }) {
                 package: WalletConnectProvider,
                 options: {
                   rpc: {
-                    137: "https://rpc-mainnet.maticvigil.com/" //137: "https://rpc-mainnet.maticvigil.com/" // required
+                    137: "https://polygon-rpc.com/" //137: "https://polygon-rpc.com/" // required
                   }
                 }
               }
