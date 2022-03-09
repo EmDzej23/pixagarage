@@ -1025,6 +1025,56 @@ export default function CreateItem() {
     router.push('./')
   }
 
+  async function downloadEnlarged() {
+    const data = window.finalMap;
+    const size = window.imW / window.smallH;
+    const index = 5;
+
+    //canvas
+    var canvas = document.createElement('canvas');
+    canvas.id = "canvas2";
+    canvas.width = window.imW * index;
+    canvas.height = window.imH * index;
+
+
+
+    var body = document.getElementsByTagName("body")[0];
+    canvas.style.display = "none";
+    canvas.style.visibility = "hidden";
+    body.appendChild(canvas);
+
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = "red";
+    ctx.fillRect(0, 0, 50, 50);
+    ctx.canvas.style.display = "none";
+    ctx.canvas.style.visibility = "hidden";
+
+    const keys = Object.keys(data);
+    if (data["background"]) {
+      ctx.fillStyle = data["background"].color;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
+    for (let i = 0; i < keys.length; i++) {
+      ctx.fillStyle = data[keys[i]].color;
+      // if (keys[i] === "background") {
+      //   ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // }
+      // else {
+      const x = +keys[i].split(":")[0];
+      const y = +keys[i].split(":")[1];
+      debugger;
+
+      ctx.fillRect(x * index, y * index, size * index, size * index);
+      // }
+    }
+
+    //download
+    var link = document.createElement('a');
+    link.download = 'filename.png';
+    link.href = document.getElementById('canvas2').toDataURL()
+    link.click();
+    ctx.canvas.remove();
+  }
 
   async function downloadCanvas() {
     if (!window.disableBorders && confirm('Remove borders from your drawing?')) {
@@ -1465,6 +1515,7 @@ export default function CreateItem() {
           <button className="button" onClick={() => saveWork()}><FontAwesomeIcon icon={faSave} /> Save</button>
 
           <button className="button green-btn" onClick={() => downloadCanvas()}>SELL YOUR ART <FontAwesomeIcon icon={faRocket} /></button>
+          <button className="button" onClick={() => downloadEnlarged()}>Download <FontAwesomeIcon icon={faDownload} /></button>
           <button className="button" onClick={() => openModal('info')}>READ <FontAwesomeIcon icon={faInfo} /></button>
           <hr />
 
